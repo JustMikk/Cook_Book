@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,13 +8,33 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import Animated, { useSharedValue, withSpring } from "react-native-reanimated";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { BellIcon, MagnifyingGlassIcon } from "react-native-heroicons/outline";
+import Categories from "../components/categories";
+import axios from "axios";
+import Recipes from "../components/recipes";
+
 const HomeScreen = () => {
+  const [activeCategory, setActiveCategory] = useState("Beef");
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    getCategories();
+  }, []);
+  const getCategories = async () => {
+    try {
+      const response = await axios.get(
+        "https://themealdb.com/api/json/v1/1/categories.php"
+      );
+      if (response && response.data) {
+        setCategories(response.data.categories);
+      }
+    } catch (error) {
+      console.log("error: " + error);
+    }
+  };
   return (
     <View className="flex-1 bg-white ">
       <StatusBar style="dark" />
@@ -26,6 +46,7 @@ const HomeScreen = () => {
         {/* avatar and notification */}
         <View className="mx-4 flex-row justify-between">
           <Image
+            className="rounded-full"
             source={{
               uri: "https://img.freepik.com/premium-photo/memoji-african-american-man-white-background-emoji_826801-6842.jpg?w=826",
             }}
@@ -71,7 +92,21 @@ const HomeScreen = () => {
         </View>
 
         {/* categories  */}
-        <View></View>
+        <View>
+          {categories.length > 0 && (
+            <Categories
+              categories={categories}
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}
+            />
+          )}
+        </View>
+
+        {/* recipes */}
+
+        <View>
+          <Recipes />
+        </View>
       </ScrollView>
     </View>
   );
