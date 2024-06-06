@@ -14,7 +14,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-const Categories = ({ categories, activeCategory, setActiveCategory }) => {
+const Categories = ({ categories, activeCategory, handleChangeCategory }) => {
   return (
     <Animated.View entering={FadeInDown.duration(500).springify()}>
       <ScrollView
@@ -32,7 +32,7 @@ const Categories = ({ categories, activeCategory, setActiveCategory }) => {
               // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
               key={index}
               onPress={() => {
-                setActiveCategory(cat.strCategory);
+                handleChangeCategory(cat.strCategory);
               }}
               className="flex items-center space-y-1"
             >
