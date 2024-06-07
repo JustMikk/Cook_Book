@@ -9,8 +9,10 @@ import { mealData } from "../constants";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import Loading from "../components/loading";
 import { CachedImage } from "../helpers/image";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Recipes({ meals, categories }) {
+  const navigation = useNavigation();
   return (
     <View className="mx-4 space-y-3">
       <Text
@@ -29,7 +31,9 @@ export default function Recipes({ meals, categories }) {
             keyExtractor={(item) => item.idMeal}
             numColumns={2}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item, i }) => <RecipeCard item={item} index={i} />}
+            renderItem={({ item, i }) => (
+              <RecipeCard item={item} index={i} navigation={navigation} />
+            )}
             //   refreshing={isLoadingNext}
             //   onRefresh={() => refetch({ first: ITEM_CNT })}
             onEndReachedThreshold={0.1}
@@ -41,7 +45,7 @@ export default function Recipes({ meals, categories }) {
   );
 }
 
-const RecipeCard = ({ item, index }) => {
+const RecipeCard = ({ item, index, navigation }) => {
   let isEven = index % 2 === 0;
   return (
     <Animated.View
@@ -51,6 +55,9 @@ const RecipeCard = ({ item, index }) => {
         .damping(12)}
     >
       <Pressable
+        onPress={() => {
+          navigation.navigate("RecipeDetail", { ...item });
+        }}
         style={{
           width: "100%",
           paddingLeft: isEven ? 0 : 8,
