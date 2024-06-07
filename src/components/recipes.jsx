@@ -7,6 +7,8 @@ import {
 import MasonryList from "@react-native-seoul/masonry-list";
 import { mealData } from "../constants";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import Loading from "../components/loading";
+import { CachedImage } from "../helpers/image";
 
 export default function Recipes({ meals, categories }) {
   return (
@@ -17,8 +19,11 @@ export default function Recipes({ meals, categories }) {
       >
         Recipes
       </Text>
+
       <View>
-        {categories.length == 0 || meals.length === 0 ? null : (
+        {categories.length == 0 || meals.length === 0 ? (
+          <Loading size="large" className="mt-20" />
+        ) : (
           <MasonryList
             data={meals}
             keyExtractor={(item) => item.idMeal}
@@ -53,13 +58,17 @@ const RecipeCard = ({ item, index }) => {
         }}
         className="flex justify-center mb-4 space-y-1"
       >
-        <Image
+        {/* <Image
+          
+        /> */}
+
+        <CachedImage
           style={{
             width: "100%",
             height: index % 3 === 0 ? hp(25) : hp(35),
             borderRadius: 35,
           }}
-          source={{ uri: item.strMealThumb }}
+          uri={item.strMealThumb}
           className="bg-black/5"
         />
         <Text

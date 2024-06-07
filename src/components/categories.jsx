@@ -13,6 +13,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { CachedImage } from "../helpers/image";
 
 const Categories = ({ categories, activeCategory, handleChangeCategory }) => {
   return (
@@ -37,9 +38,12 @@ const Categories = ({ categories, activeCategory, handleChangeCategory }) => {
               className="flex items-center space-y-1"
             >
               <View className={"rounded-full p-[6px] " + activeButtonClass}>
-                <Image
+                {/* <Image
+                  
+                /> */}
+                <CachedImage
                   className="rounded-full"
-                  source={{ uri: cat.strCategoryThumb }}
+                  uri={cat.strCategoryThumb}
                   style={{ width: hp(6), height: hp(6) }}
                 />
               </View>
