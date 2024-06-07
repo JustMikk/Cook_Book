@@ -1,13 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  TextInput,
-} from "react-native";
+import { View, Text, ScrollView, Image, TextInput } from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -21,15 +14,37 @@ const HomeScreen = () => {
   const [activeCategory, setActiveCategory] = useState("Beef");
   const [categories, setCategories] = useState([]);
   const [meals, setMeals] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
   useEffect(() => {
     getCategories();
     getRecipes();
   }, []);
+
   const handleChangeCategory = (category) => {
     getRecipes(category);
     setActiveCategory(category);
     setMeals([]);
   };
+
+  const handleSearch = async (query) => {
+    setSearchQuery(query);
+    if (query.length > 0) {
+      try {
+        const response = await axios.get(
+          `https://themealdb.com/api/json/v1/1/search.php?s=${query}`
+        );
+        if (response && response.data) {
+          setMeals(response.data.meals);
+        }
+      } catch (error) {
+        console.log("error: " + error);
+      }
+    } else {
+      getRecipes(activeCategory);
+    }
+  };
+
   const getCategories = async () => {
     try {
       const response = await axios.get(
@@ -43,7 +58,7 @@ const HomeScreen = () => {
     }
   };
 
-  const getRecipes = async (category = "beef") => {
+  const getRecipes = async (category = "Beef") => {
     try {
       const response = await axios.get(
         `https://themealdb.com/api/json/v1/1/filter.php?c=${category}`
@@ -55,8 +70,9 @@ const HomeScreen = () => {
       console.log("error: " + error);
     }
   };
+
   return (
-    <View className="flex-1 bg-white ">
+    <View className="flex-1 bg-white">
       <StatusBar style="dark" />
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -101,17 +117,19 @@ const HomeScreen = () => {
         {/* search bar */}
         <View className="mx-4 flex-row items-center rounded-full bg-black/5 p-[6px]">
           <TextInput
-            placeholder="search what you are craving for"
+            placeholder="Search what you are craving for"
             placeholderTextColor={"gray"}
             style={{ fontSize: hp(1.7) }}
             className="flex-1 text-base mb-1 pl-3 tracking-wider"
+            value={searchQuery}
+            onChangeText={handleSearch}
           />
           <View className="bg-white rounded-full p-3">
             <MagnifyingGlassIcon size={hp(2.5)} strokeWidth={3} color="gray" />
           </View>
         </View>
 
-        {/* categories  */}
+        {/* categories */}
         <View>
           {categories.length > 0 && (
             <Categories
@@ -123,7 +141,6 @@ const HomeScreen = () => {
         </View>
 
         {/* recipes */}
-
         <View>
           <Recipes meals={meals} categories={categories} />
         </View>
