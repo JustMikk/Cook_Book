@@ -7,6 +7,8 @@ Welcome to the Cook Book mobile app project! This app is built using React Nativ
 - [Mikiyas Hailegebreal]
 - [Dureti Mohammedsani]
 - [Elham Feysel]
+- [Beka Abate]
+- [Tsion Ketema]
 
 ## Getting Started
 To get started with this project, follow these steps:
