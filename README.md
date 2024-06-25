@@ -1,6 +1,6 @@
 # Cook Book App
 
-Welcome to the Cook Book mobile app project! This app is built using React Native and Tailwind CSS.
+Welcome to the Cook Book mobile app project! This app is built using React Native, Expo and Tailwind CSS.
 
 ## Group Members
 - [Nanati Asamnew]
